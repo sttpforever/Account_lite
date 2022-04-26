@@ -5,28 +5,26 @@ from .models import Project, Customer, Bank, Check
 class ProjectSerializer(serializers.ModelSerializer):
 
     class Meta:
-        fields = ('title', 'contract_number', 'description', 'customer',
-                  'price', 'additional_pay', 'total_price', 'pk', 'dohod',
-                  'last_piece')
+        exclude = ['author']
         model = Project
 
 
 class CustomerSerializer(serializers.ModelSerializer):
 
     class Meta:
-        fields = ('title', 'description', 'pk')
+        exclude = ['author']
         model = Customer
 
 
 class BankSerializer(serializers.ModelSerializer):
 
     class Meta:
-        fields = ('name', 'pk')
+        exclude = ['author']
         model = Bank
 
 
 class CheckSerializer(serializers.ModelSerializer):
 
     class Meta:
-        fields = ('number', 'project', 'bank', 'price', 'pk')
+        exclude = ['author']
         model = Check

@@ -1,13 +1,26 @@
-from django.contrib.auth import get_user_model
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-User = get_user_model()
+
+class MyUser(AbstractUser):
+    fathers_name = models.CharField('Отчество', max_length=200, default='default')
+    zip_code = models.CharField('Почтовый индекс', max_length=200, default='default')
+    city = models.CharField('Город', max_length=200, default='default')
+    street = models.CharField('Улица', max_length=200, default='default')
+    house = models.CharField('Номер дома', max_length=200, default='default')
+    office = models.CharField('Номер помещения', max_length=200, default='default')
+    inn = models.CharField('ИНН', max_length=200, default='default')
+
+
+User = MyUser
 
 
 class Project(models.Model):
     title = models.CharField('Имя', max_length=200)
     contract_number = models.CharField('Номер договора', max_length=200)
-    description = models.TextField()
+    description = models.TextField('предмет договора')
+    date_project = models.CharField('Дата договора', max_length=200,
+                                    default='default')
     create_date = models.DateTimeField("date published",
                                        auto_now_add=True)
     author = models.ForeignKey(User, on_delete=models.PROTECT,
@@ -49,7 +62,12 @@ class Customer(models.Model):
 
 
 class Bank(models.Model):
-    name = models.CharField('название банка', max_length=200)
+    name = models.CharField('название банка', max_length=200, default='default')
+    bik = models.CharField('Бик банка', max_length=200, default='default')
+    correspondent_account = models.CharField('Кор. счет', max_length=200, default='default')
+    payment_account = models.CharField('Расч. счет', max_length=200, default='default')
+    author = models.ForeignKey(User, on_delete=models.PROTECT,
+                               related_name="banks", blank=True, null=True)
 
     def __str__(self):
         return str(self.name)
@@ -65,6 +83,7 @@ class Check(models.Model):
     author = models.ForeignKey(User, on_delete=models.PROTECT,
                                related_name="checks")
     price = models.FloatField('Стоимость счета')
+    create_date = models.CharField('дата чека', max_length=200, default='default')
 
     class Meta:
         ordering = ['-bank', "-number"]
